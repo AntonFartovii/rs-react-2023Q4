@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "target": "esnext",
+    "allowImportingTsExtensions": true,
     "lib": ["dom", "esnext", "dom.iterable"],
     "jsx": "react",
     "module": "esnext",
