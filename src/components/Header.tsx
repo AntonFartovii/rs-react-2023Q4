@@ -1,5 +1,6 @@
 import React, { Component, FormEvent } from 'react';
 import classes from '../css/layout.module.css';
+import { ButtonWithError } from './ButtonWithError';
 
 interface IHeaderProps {
   getData: () => void;
@@ -42,6 +43,7 @@ export default class Header extends Component<IHeaderProps, IHeaderState> {
             </div>
             <div className="search-button">
               <input type="button" value="Search" onClick={this.clickHandler.bind(this)} />
+              <ButtonWithError />
             </div>
           </div>
         </div>

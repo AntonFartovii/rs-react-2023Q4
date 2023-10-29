@@ -13,7 +13,7 @@ export const fetchCharacters = async () => {
       method: 'GET',
     });
     return (await response.json()) as Promise<IResponse>;
-  } catch (e: any) {
+  } catch (e: { error: string } | unknown) {
     console.log(e);
   }
 };
@@ -25,7 +25,7 @@ export const fetchCharacter = async (url: string) => {
       method: 'GET',
     });
     return await response.json();
-  } catch (e: any) {
+  } catch (e: { error: string } | unknown) {
     console.log(e);
   }
 };
