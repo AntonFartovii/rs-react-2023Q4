@@ -4,11 +4,9 @@ const headers = {
   'Content-Type': 'application/json',
 };
 
-export const fetchCharacters = async () => {
-  const searchValue = localStorage.getItem('searchValue');
-  const filter = searchValue ? '/?name=' + localStorage.getItem('searchValue') : '';
+export const fetchCharacters = async (url: string) => {
   try {
-    const response = await fetch('https://rickandmortyapi.com/api/character' + filter, {
+    const response = await fetch(url, {
       headers: headers,
       method: 'GET',
     });

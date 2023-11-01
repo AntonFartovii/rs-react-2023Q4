@@ -1,9 +1,10 @@
 import React, { Component, FormEvent } from 'react';
 import classes from '../css/layout.module.css';
 import { ButtonWithError } from './ButtonWithError';
+import { getUrl } from '../utils/utils';
 
 interface IHeaderProps {
-  getData: () => void;
+  getData: (url: string) => Promise<void>;
 }
 
 interface IHeaderState {
@@ -18,9 +19,10 @@ export default class Header extends Component<IHeaderProps, IHeaderState> {
     };
   }
 
-  clickHandler() {
+  async clickHandler() {
     localStorage.setItem('searchValue', this.state.searchValue);
-    this.props.getData();
+    const url = getUrl(this.state.searchValue);
+    await this.props.getData(url);
   }
 
   searchHandler(e: FormEvent<HTMLInputElement>) {
