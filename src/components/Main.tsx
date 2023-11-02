@@ -1,6 +1,7 @@
 import React from 'react';
 import classes from '../css/layout.module.css';
 import { ICharacter, IResponse } from '../http/interfaces';
+import Pagination from './Pagination';
 
 interface MainProps {
   getData: (url: string) => Promise<void>;
@@ -25,7 +26,13 @@ const Main = ({ getData, response, loading }: MainProps) => {
   const print = () => {
     return (
       <>
-        <div className="pagination">{printPagination()}</div>
+        <div className="pagination">
+          <Pagination
+            pageHandler={pageHandler}
+            prev={response?.info?.prev}
+            next={response?.info?.next}
+          />
+        </div>
         <div className="character-list">
           {response &&
             response.results?.map((item: ICharacter) => (
@@ -40,29 +47,6 @@ const Main = ({ getData, response, loading }: MainProps) => {
               </div>
             ))}
         </div>
-      </>
-    );
-  };
-
-  const printPagination = () => {
-    const prev = response?.info?.prev as string;
-    const next = response?.info?.next as string;
-    const prevClass = prev ? 'pagination-item active' : 'pagination-item';
-    const nextClass = next ? 'pagination-item active' : 'pagination-item';
-    return (
-      <>
-        <input
-          type="button"
-          className={prevClass}
-          value="Prev"
-          onClick={() => pageHandler('prev')}
-        />
-        <input
-          type="button"
-          className={nextClass}
-          value="Next"
-          onClick={() => pageHandler('next')}
-        />
       </>
     );
   };
