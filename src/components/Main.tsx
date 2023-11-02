@@ -7,9 +7,10 @@ interface MainProps {
   getData: (url: string) => Promise<void>;
   response: IResponse | undefined;
   loading: boolean;
+  page: string;
 }
 
-const Main = ({ getData, response, loading }: MainProps) => {
+const Main = ({ getData, response, loading, page }: MainProps) => {
   const pageHandler = async (type: string) => {
     const info = response?.info;
     if (type === 'prev') {
@@ -27,11 +28,7 @@ const Main = ({ getData, response, loading }: MainProps) => {
     return (
       <>
         <div className="pagination">
-          <Pagination
-            pageHandler={pageHandler}
-            prev={response?.info?.prev}
-            next={response?.info?.next}
-          />
+          <Pagination pageHandler={pageHandler} info={response?.info} page={page} />
         </div>
         <div className="character-list">
           {response &&

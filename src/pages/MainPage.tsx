@@ -5,10 +5,12 @@ import { fetchCharacters } from '../http/charactersApi';
 import { IResponse } from '../http/interfaces';
 import classes from '../css/layout.module.css';
 import { getUrl } from '../utils/utils';
+import { useParams } from 'react-router-dom';
 
 const MainPage = () => {
   const [response, setResponse] = useState<IResponse>();
   const [loading, setLoading] = useState<boolean>(false);
+  const { page } = useParams() as { page: string };
 
   const getData = async (url: string) => {
     setLoading(true);
@@ -21,13 +23,13 @@ const MainPage = () => {
   useEffect(() => {
     const searchValue = localStorage.getItem('searchValue');
     const url = getUrl(searchValue);
-    getData(url);
-  }, []);
+    page ? getData(`${url}?page=${page}`) : getData(url);
+  }, [page]);
 
   return (
     <div className={classes.wrapper}>
       <Header getData={getData} />
-      <Main getData={getData} loading={loading} response={response} />
+      <Main getData={getData} loading={loading} response={response} page={page} />
     </div>
   );
 };

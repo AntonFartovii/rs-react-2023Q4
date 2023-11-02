@@ -26,6 +26,11 @@ export const routesAll: IRoute[] = [
     Component: () => <Page404 />,
   },
   {
+    name: 'Main Pagination',
+    path: MAIN_ROUTE + 'search/:page',
+    Component: () => <MainPage />,
+  },
+  {
     name: 'Search',
     path: SEARCH_ROUTE + '/:id',
     Component: () => <SearchPage />,
