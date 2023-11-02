@@ -1,30 +1,16 @@
-import React, { Component } from 'react';
+import React, { useEffect, useState } from 'react';
 
-interface ButtonState {
-  click: boolean;
-}
+const ButtonWithError = () => {
+  const [click, setClick] = useState<boolean>(false);
+  const clickHandler = () => setClick(true);
 
-interface ButtonProps {}
-
-export class ButtonWithError extends Component<ButtonProps, ButtonState> {
-  constructor(props: ButtonProps) {
-    super(props);
-    this.state = {
-      click: false,
-    };
-  }
-
-  clickHandler = () => this.setState({ click: true });
-
-  componentDidUpdate() {
-    if (this.state.click) {
+  useEffect(() => {
+    if (click) {
       throw new Error('My Error!');
     }
-  }
+  }, [click]);
 
-  render() {
-    return (
-      <input type="button" onClick={this.clickHandler} className="test-button" value="Test Error" />
-    );
-  }
-}
+  return <input type="button" onClick={clickHandler} className="test-button" value="Test Error" />;
+};
+
+export default ButtonWithError;

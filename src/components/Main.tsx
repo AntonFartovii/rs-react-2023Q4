@@ -1,57 +1,34 @@
-import React, { Component, ReactNode } from 'react';
+import React from 'react';
 import classes from '../css/layout.module.css';
 import { ICharacter, IResponse } from '../http/interfaces';
 
 interface MainProps {
-  children?: ReactNode;
   getData: (url: string) => Promise<void>;
   response: IResponse | undefined;
   loading: boolean;
 }
 
-export default class Main extends Component<MainProps> {
-  constructor(props: MainProps) {
-    super(props);
-  }
-
-  render() {
-    return (
-      <main className="container container-main">
-        <div className={classes['inner-wrapper']}>
-          <div className="main-wrapper">
-            {this.props.loading ? (
-              <span className="loader"></span>
-            ) : this.props.response?.results ? (
-              this.print()
-            ) : (
-              <div>Ничего не найдено!</div>
-            )}
-          </div>
-        </div>
-      </main>
-    );
-  }
-
-  async pageHandler(type: string) {
-    const info = this.props.response?.info;
+const Main = ({ getData, response, loading }: MainProps) => {
+  const pageHandler = async (type: string) => {
+    const info = response?.info;
     if (type === 'prev') {
       if (info?.prev) {
-        await this.props.getData(info.prev);
+        await getData(info.prev);
       }
     } else if (type === 'next') {
       if (info?.next) {
-        await this.props.getData(info.next);
+        await getData(info.next);
       }
     }
-  }
+  };
 
-  private print() {
+  const print = () => {
     return (
       <>
-        <div className="pagination">{this.printPagination()}</div>
+        <div className="pagination">{printPagination()}</div>
         <div className="character-list">
-          {this.props.response &&
-            this.props.response.results?.map((item: ICharacter) => (
+          {response &&
+            response.results?.map((item: ICharacter) => (
               <div className="character-item" key={item.id}>
                 {item.name}
                 <div className="character-image">
@@ -65,11 +42,11 @@ export default class Main extends Component<MainProps> {
         </div>
       </>
     );
-  }
+  };
 
-  private printPagination() {
-    const prev = this.props.response?.info?.prev as string;
-    const next = this.props.response?.info?.next as string;
+  const printPagination = () => {
+    const prev = response?.info?.prev as string;
+    const next = response?.info?.next as string;
     const prevClass = prev ? 'pagination-item active' : 'pagination-item';
     const nextClass = next ? 'pagination-item active' : 'pagination-item';
     return (
@@ -78,15 +55,33 @@ export default class Main extends Component<MainProps> {
           type="button"
           className={prevClass}
           value="Prev"
-          onClick={() => this.pageHandler('prev')}
+          onClick={() => pageHandler('prev')}
         />
         <input
           type="button"
           className={nextClass}
           value="Next"
-          onClick={() => this.pageHandler('next')}
+          onClick={() => pageHandler('next')}
         />
       </>
     );
-  }
-}
+  };
+
+  return (
+    <main className="container container-main">
+      <div className={classes['inner-wrapper']}>
+        <div className="main-wrapper">
+          {loading ? (
+            <span className="loader"></span>
+          ) : response?.results ? (
+            print()
+          ) : (
+            <div>Ничего не найдено!</div>
+          )}
+        </div>
+      </div>
+    </main>
+  );
+};
+
+export default Main;

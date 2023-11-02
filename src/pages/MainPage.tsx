@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useEffect, useState } from 'react';
 import Header from '../components/Header';
 import Main from '../components/Main';
 import { fetchCharacters } from '../http/charactersApi';
@@ -6,45 +6,30 @@ import { IResponse } from '../http/interfaces';
 import classes from '../css/layout.module.css';
 import { getUrl } from '../utils/utils';
 
-export interface IPageProps {
-  showPageName?: (name: string) => void;
-}
+const MainPage = () => {
+  const [response, setResponse] = useState<IResponse>();
+  const [loading, setLoading] = useState<boolean>(false);
 
-interface PageState {
-  response: IResponse | undefined;
-  loading: boolean;
-}
-
-export default class MainPage extends Component<IPageProps, PageState> {
-  constructor(props: IPageProps) {
-    super(props);
-    this.state = {
-      response: undefined,
-      loading: false,
-    };
-    this.getData = this.getData.bind(this);
-  }
-
-  async getData(url: string) {
-    this.setState({ loading: true });
+  const getData = async (url: string) => {
+    setLoading(true);
     const response = await fetchCharacters(url);
     response && console.log(response);
-    response && this.setState({ response });
-    this.setState({ loading: false });
-  }
+    setResponse(response);
+    setLoading(false);
+  };
 
-  async componentDidMount(): Promise<void> {
+  useEffect(() => {
     const searchValue = localStorage.getItem('searchValue');
     const url = getUrl(searchValue);
-    await this.getData(url);
-  }
+    getData(url);
+  }, []);
 
-  render() {
-    return (
-      <div className={classes.wrapper}>
-        <Header getData={this.getData} />
-        <Main getData={this.getData} loading={this.state.loading} response={this.state.response} />
-      </div>
-    );
-  }
-}
+  return (
+    <div className={classes.wrapper}>
+      <Header getData={getData} />
+      <Main getData={getData} loading={loading} response={response} />
+    </div>
+  );
+};
+
+export default MainPage;
