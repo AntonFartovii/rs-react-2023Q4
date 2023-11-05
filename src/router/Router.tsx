@@ -1,17 +1,28 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
-import { MAIN_ROUTE, PAGE_404 } from './pages';
-import MainPage from '../pages/MainPage';
-import Page404 from '../pages/Page404';
+import { PAGE_404 } from './pages';
+import { IRoute, routesAll } from './routes';
 
-export default class AppRouter extends Component {
-  render() {
-    return (
-      <Routes>
-        <Route path={MAIN_ROUTE} element={<MainPage />}></Route>
-        <Route path="/404" element={<Page404 />}></Route>
-        <Route path="*" element={<Navigate to={PAGE_404} />}></Route>
-      </Routes>
-    );
-  }
-}
+const AppRouter = () => {
+  const renderRoutes = (route: IRoute) => {
+    const Component = route.Component;
+    if (route.routes) {
+      return (
+        <Route key={route.path} path={route.path} element={<Component />}>
+          {route.routes.map(renderRoutes)}
+        </Route>
+      );
+    } else {
+      return <Route key={route.path} path={route.path} element={<Component />} />;
+    }
+  };
+
+  return (
+    <Routes>
+      {routesAll.map(renderRoutes)}
+      <Route path="*" element={<Navigate to={PAGE_404} />} />
+    </Routes>
+  );
+};
+
+export default AppRouter;

@@ -18,13 +18,15 @@ export interface ICharacter {
   url: string;
 }
 
+export interface ResponseInfo {
+  count: number;
+  next: string | null;
+  pages: number;
+  prev: string | null;
+}
+
 export interface IResponse {
-  info?: {
-    count: number;
-    next: string | null;
-    pages: number;
-    prev: string | null;
-  };
+  info?: ResponseInfo;
   results?: ICharacter[];
   error?: string;
 }

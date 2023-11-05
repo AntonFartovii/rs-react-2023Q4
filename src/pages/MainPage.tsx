@@ -1,46 +1,42 @@
-import React, { Component } from 'react';
+import React, { useEffect, useState } from 'react';
 import Header from '../components/Header';
 import Main from '../components/Main';
 import { fetchCharacters } from '../http/charactersApi';
 import { IResponse } from '../http/interfaces';
+import classes from '../css/layout.module.css';
+import { getUrl } from '../utils/utils';
+import { Outlet, useParams } from 'react-router-dom';
 
-export interface IPageProps {
-  showPageName?: (name: string) => void;
-}
+const MainPage = () => {
+  const [response, setResponse] = useState<IResponse>();
+  const [loading, setLoading] = useState<boolean>(false);
+  const { page } = useParams() as { page: string };
 
-interface PageState {
-  response: IResponse | undefined;
-  loading: boolean;
-}
+  const getData = async (url: string) => {
+    setLoading(true);
+    const response = await fetchCharacters(url);
+    // response && console.log(response);
+    setResponse(response);
+    setLoading(false);
+  };
 
-export default class MainPage extends Component<IPageProps, PageState> {
-  constructor(props: IPageProps) {
-    super(props);
-    this.state = {
-      response: undefined,
-      loading: false,
-    };
-    this.getData = this.getData.bind(this);
-  }
+  useEffect(() => {
+    const searchValue = localStorage.getItem('searchValue');
+    const url = getUrl(searchValue);
+    page ? getData(`${url}?page=${page}`) : getData(url);
+  }, [page]);
 
-  async getData() {
-    this.setState({ loading: true });
-    const response = await fetchCharacters();
-    response && console.log(response);
-    response && this.setState({ response });
-    this.setState({ loading: false });
-  }
+  return (
+    <div className={classes.wrapper}>
+      <Header getData={getData} />
+      <div className="container-frontpage">
+        <div className="left-front">
+          <Main getData={getData} loading={loading} response={response} page={page || '1'} />
+        </div>
+        <Outlet />
+      </div>
+    </div>
+  );
+};
 
-  async componentDidMount(): Promise<void> {
-    await this.getData();
-  }
-
-  render() {
-    return (
-      <>
-        <Header getData={this.getData} />
-        <Main loading={this.state.loading} response={this.state.response} />
-      </>
-    );
-  }
-}
+export default MainPage;

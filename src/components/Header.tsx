@@ -1,53 +1,45 @@
-import React, { Component, FormEvent } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 import classes from '../css/layout.module.css';
-import { ButtonWithError } from './ButtonWithError';
+import ButtonWithError from './ButtonWithError';
+import { getUrl } from '../utils/utils';
 
 interface IHeaderProps {
-  getData: () => void;
+  getData: (url: string) => Promise<void>;
 }
 
-interface IHeaderState {
-  searchValue: string;
-}
+const Header = ({ getData }: IHeaderProps) => {
+  const [searchValue, setSearchValue] = useState<string>('');
 
-export default class Header extends Component<IHeaderProps, IHeaderState> {
-  constructor(props: IHeaderProps) {
-    super(props);
-    this.state = {
-      searchValue: localStorage.getItem('searchValue') || '',
-    };
-  }
+  useEffect(() => {
+    setSearchValue(localStorage.getItem('searchValue') || '');
+  }, []);
 
-  clickHandler() {
-    localStorage.setItem('searchValue', this.state.searchValue);
-    this.props.getData();
-  }
+  const clickHandler = async () => {
+    localStorage.setItem('searchValue', searchValue);
+    const url = getUrl(searchValue);
+    await getData(url);
+  };
 
-  searchHandler(e: FormEvent<HTMLInputElement>) {
+  const searchHandler = (e: FormEvent<HTMLInputElement>) => {
     const value = e.currentTarget.value;
-    this.setState({ searchValue: value });
-  }
+    setSearchValue(value);
+  };
 
-  render() {
-    return (
-      <header className={classes.container}>
-        <div className={classes['inner-wrapper'] + ' ' + classes['header-wrapper']}>
-          <div className="search-box">
-            <div className="search-text">
-              <input
-                type="text"
-                name="searchValue"
-                value={this.state.searchValue}
-                onInput={this.searchHandler.bind(this)}
-              />
-            </div>
-            <div className="search-button">
-              <input type="button" value="Search" onClick={this.clickHandler.bind(this)} />
-              <ButtonWithError />
-            </div>
+  return (
+    <header className={classes.container}>
+      <div className={classes['inner-wrapper'] + ' ' + classes['header-wrapper']}>
+        <div className="search-box">
+          <div className="search-text">
+            <input type="text" name="searchValue" value={searchValue} onInput={searchHandler} />
+          </div>
+          <div className="search-button">
+            <input type="button" value="Search" onClick={clickHandler} />
+            <ButtonWithError />
           </div>
         </div>
-      </header>
-    );
-  }
-}
+      </div>
+    </header>
+  );
+};
+
+export default Header;
