@@ -2,6 +2,8 @@ import React from 'react';
 import classes from '../css/layout.module.css';
 import { ICharacter, IResponse } from '../http/interfaces';
 import Pagination from './Pagination';
+import { useNavigate } from 'react-router-dom';
+import { SEARCH_ROUTE } from '../router/pages';
 
 interface MainProps {
   getData: (url: string) => Promise<void>;
@@ -11,6 +13,8 @@ interface MainProps {
 }
 
 const Main = ({ getData, response, loading, page }: MainProps) => {
+  const navigate = useNavigate();
+
   const pageHandler = async (type: string) => {
     const info = response?.info;
     if (type === 'prev') {
@@ -24,16 +28,17 @@ const Main = ({ getData, response, loading, page }: MainProps) => {
     }
   };
 
+  const openCharacter = (id: number) => {
+    navigate(`/${SEARCH_ROUTE}/${page}/details/${id}`);
+  };
+
   const print = () => {
     return (
       <>
-        <div className="pagination">
-          <Pagination pageHandler={pageHandler} info={response?.info} page={page} />
-        </div>
         <div className="character-list">
           {response &&
             response.results?.map((item: ICharacter) => (
-              <div className="character-item" key={item.id}>
+              <div className="character-item" key={item.id} onClick={() => openCharacter(item.id)}>
                 {item.name}
                 <div className="character-image">
                   <img src={item.image} />
@@ -43,6 +48,9 @@ const Main = ({ getData, response, loading, page }: MainProps) => {
                 <div>Status: {item.status}</div>
               </div>
             ))}
+        </div>
+        <div className="pagination">
+          <Pagination pageHandler={pageHandler} info={response?.info} page={page} />
         </div>
       </>
     );

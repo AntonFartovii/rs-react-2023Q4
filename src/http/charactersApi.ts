@@ -1,4 +1,4 @@
-import { IResponse } from './interfaces';
+import { ICharacter, IResponse } from './interfaces';
 
 const headers = {
   'Content-Type': 'application/json',
@@ -22,7 +22,7 @@ export const fetchCharacter = async (url: string) => {
       headers: headers,
       method: 'GET',
     });
-    return await response.json();
+    return (await response.json()) as Promise<ICharacter>;
   } catch (e: { error: string } | unknown) {
     console.log(e);
   }

@@ -2,12 +2,13 @@ import React, { JSX } from 'react';
 import { MAIN_ROUTE, PAGE_404, SEARCH_ROUTE } from './pages';
 import MainPage from '../pages/MainPage';
 import Page404 from '../pages/Page404';
-import SearchPage from '../pages/SearchPage';
+import CharacterPage from '../pages/CharacterPage';
 
 export interface IRoute {
   name: string;
   path: string;
   Component: () => JSX.Element;
+  routes?: IRoute[];
 }
 
 export const routesPages: IRoute[] = [
@@ -27,17 +28,14 @@ export const routesAll: IRoute[] = [
   },
   {
     name: 'Main Pagination',
-    path: MAIN_ROUTE + 'search/:page',
+    path: MAIN_ROUTE + SEARCH_ROUTE + '/:page',
     Component: () => <MainPage />,
-  },
-  {
-    name: 'Search',
-    path: SEARCH_ROUTE + '/:id',
-    Component: () => <SearchPage />,
-  },
-  {
-    name: 'Search',
-    path: SEARCH_ROUTE,
-    Component: () => <SearchPage />,
+    routes: [
+      {
+        name: 'Front page with character',
+        path: 'details/:id',
+        Component: () => <CharacterPage />,
+      },
+    ],
   },
 ];

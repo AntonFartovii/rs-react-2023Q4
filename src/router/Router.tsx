@@ -6,7 +6,15 @@ import { IRoute, routesAll } from './routes';
 const AppRouter = () => {
   const renderRoutes = (route: IRoute) => {
     const Component = route.Component;
-    return <Route key={route.path} path={route.path} element={<Component />} />;
+    if (route.routes) {
+      return (
+        <Route key={route.path} path={route.path} element={<Component />}>
+          {route.routes.map(renderRoutes)}
+        </Route>
+      );
+    } else {
+      return <Route key={route.path} path={route.path} element={<Component />} />;
+    }
   };
 
   return (

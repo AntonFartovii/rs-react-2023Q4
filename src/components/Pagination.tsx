@@ -20,7 +20,7 @@ const Pagination = ({ pageHandler, info, page }: IPagination) => {
     for (let i = 1; i <= count; i++) {
       const className = i === +page ? 'pagination-item normal' : 'pagination-item normal active';
       arr.push(
-        <div className={className} onClick={() => navigate(MAIN_ROUTE + 'search/' + i)}>
+        <div key={i} className={className} onClick={() => navigate(MAIN_ROUTE + 'search/' + i)}>
           {i}
         </div>
       );
@@ -28,13 +28,7 @@ const Pagination = ({ pageHandler, info, page }: IPagination) => {
     return arr;
   };
   console.log(info);
-  return (
-    <>
-      <input type="button" className={prevClass} value="<" onClick={() => pageHandler('prev')} />
-      {print()}
-      <input type="button" className={nextClass} value=">" onClick={() => pageHandler('next')} />
-    </>
-  );
+  return <>{print()}</>;
 };
 
 export default Pagination;

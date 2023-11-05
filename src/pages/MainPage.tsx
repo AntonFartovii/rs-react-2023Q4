@@ -5,7 +5,7 @@ import { fetchCharacters } from '../http/charactersApi';
 import { IResponse } from '../http/interfaces';
 import classes from '../css/layout.module.css';
 import { getUrl } from '../utils/utils';
-import { useParams } from 'react-router-dom';
+import { Outlet, useParams } from 'react-router-dom';
 
 const MainPage = () => {
   const [response, setResponse] = useState<IResponse>();
@@ -15,7 +15,7 @@ const MainPage = () => {
   const getData = async (url: string) => {
     setLoading(true);
     const response = await fetchCharacters(url);
-    response && console.log(response);
+    // response && console.log(response);
     setResponse(response);
     setLoading(false);
   };
@@ -29,7 +29,12 @@ const MainPage = () => {
   return (
     <div className={classes.wrapper}>
       <Header getData={getData} />
-      <Main getData={getData} loading={loading} response={response} page={page} />
+      <div className="container-frontpage">
+        <div className="left-front">
+          <Main getData={getData} loading={loading} response={response} page={page || '1'} />
+        </div>
+        <Outlet />
+      </div>
     </div>
   );
 };
