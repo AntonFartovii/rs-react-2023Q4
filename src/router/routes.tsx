@@ -1,4 +1,4 @@
-import React, { JSX } from 'react';
+import { JSX } from 'react';
 import { MAIN_ROUTE, PAGE_404, SEARCH_ROUTE } from './pages';
 import MainPage from '../pages/MainPage';
 import Page404 from '../pages/Page404';

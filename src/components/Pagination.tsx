@@ -1,4 +1,4 @@
-import React, { JSX } from 'react';
+import { JSX } from 'react';
 import { ResponseInfo } from '../http/interfaces';
 import { useNavigate } from 'react-router-dom';
 import { MAIN_ROUTE } from '../router/pages';
@@ -9,9 +9,7 @@ interface IPagination {
   page: string;
 }
 
-const Pagination = ({ pageHandler, info, page }: IPagination) => {
-  const prevClass = info?.prev ? 'pagination-item normal active' : 'pagination-item disabled';
-  const nextClass = info?.next ? 'pagination-item normal active' : 'pagination-item disabled';
+const Pagination = ({ info, page }: IPagination) => {
   const navigate = useNavigate();
 
   const print = () => {

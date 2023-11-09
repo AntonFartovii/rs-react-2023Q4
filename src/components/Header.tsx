@@ -1,4 +1,4 @@
-import React, { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import classes from '../css/layout.module.css';
 import ButtonWithError from './ButtonWithError';
 import { getUrl } from '../utils/utils';

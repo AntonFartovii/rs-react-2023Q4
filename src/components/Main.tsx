@@ -1,4 +1,3 @@
-import React from 'react';
 import classes from '../css/layout.module.css';
 import { ICharacter, IResponse } from '../http/interfaces';
 import Pagination from './Pagination';
