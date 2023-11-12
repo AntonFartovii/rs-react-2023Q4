@@ -9,6 +9,7 @@ const CharacterPage = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [character, setCharacter] = useState<ICharacter>();
   const navigate = useNavigate();
+
   const getData = async () => {
     setLoading(true);
     const response = await fetchCharacter(`https://rickandmortyapi.com/api/character/${id}`);
@@ -28,7 +29,7 @@ const CharacterPage = () => {
   return (
     <>
       {loading ? (
-        <span className="loader"></span>
+        <span className="loader" data-testid="loader"></span>
       ) : (
         <div className="right-front">
           <div onClick={onHide}>Close side detail</div>

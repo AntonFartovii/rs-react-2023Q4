@@ -1,14 +1,15 @@
-import { useEffect, useState } from 'react';
+import { FC, useState } from 'react';
+import { MyError } from '../errorBoundary/MyError.ts';
 
-const ButtonWithError = () => {
+const ButtonWithError: FC = () => {
   const [click, setClick] = useState<boolean>(false);
-  const clickHandler = () => setClick(true);
+  const clickHandler = (): void => {
+    setClick(true);
+  };
 
-  useEffect(() => {
-    if (click) {
-      throw new Error('My Error!');
-    }
-  }, [click]);
+  if (click) {
+    throw new MyError();
+  }
 
   return <input type="button" onClick={clickHandler} className="test-button" value="Test Error" />;
 };

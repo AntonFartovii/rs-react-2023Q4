@@ -1,28 +1,25 @@
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useContext } from 'react';
 import classes from '../css/layout.module.css';
 import ButtonWithError from './ButtonWithError';
 import { getUrl } from '../utils/utils';
+import { Context } from '../App.tsx';
 
 interface IHeaderProps {
   getData: (url: string) => Promise<void>;
 }
 
 const Header = ({ getData }: IHeaderProps) => {
-  const [searchValue, setSearchValue] = useState<string>('');
-
-  useEffect(() => {
-    setSearchValue(localStorage.getItem('searchValue') || '');
-  }, []);
+  const { setSearchValue, searchValue } = useContext(Context);
 
   const clickHandler = async () => {
-    localStorage.setItem('searchValue', searchValue);
+    searchValue && localStorage.setItem('searchValue', searchValue);
     const url = getUrl(searchValue);
     await getData(url);
   };
 
   const searchHandler = (e: FormEvent<HTMLInputElement>) => {
     const value = e.currentTarget.value;
-    setSearchValue(value);
+    setSearchValue && setSearchValue(value);
   };
 
   return (
@@ -30,10 +27,16 @@ const Header = ({ getData }: IHeaderProps) => {
       <div className={classes['inner-wrapper'] + ' ' + classes['header-wrapper']}>
         <div className="search-box">
           <div className="search-text">
-            <input type="text" name="searchValue" value={searchValue} onInput={searchHandler} />
+            <input
+              type="text"
+              name="searchValue"
+              value={searchValue}
+              onInput={searchHandler}
+              data-testid="searchInput"
+            />
           </div>
           <div className="search-button">
-            <input type="button" value="Search" onClick={clickHandler} />
+            <input type="button" value="Search" onClick={clickHandler} data-testid="sendButton" />
             <ButtonWithError />
           </div>
         </div>

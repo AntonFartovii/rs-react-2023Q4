@@ -1,31 +1,36 @@
-import { JSX } from 'react';
-import { ResponseInfo } from '../http/interfaces';
+import { JSX, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MAIN_ROUTE } from '../router/pages';
+import { Context, ContextType } from '../App.tsx';
 
-interface IPagination {
-  pageHandler: (value: string) => void;
-  info: ResponseInfo | undefined;
-  page: string;
-}
-
-const Pagination = ({ info, page }: IPagination) => {
+const Pagination = () => {
   const navigate = useNavigate();
+  const { response, currentPage, setCurrentPage } = useContext<ContextType>(Context);
+
+  const changePage = (page: string) => {
+    setCurrentPage && setCurrentPage(page);
+    navigate(MAIN_ROUTE + 'search/' + page);
+  };
 
   const print = () => {
     const arr: JSX.Element[] = [];
-    const count = info?.pages || 0;
+    const count = response?.info?.pages || 0;
     for (let i = 1; i <= count; i++) {
-      const className = i === +page ? 'pagination-item normal' : 'pagination-item normal active';
+      const className =
+        i === +currentPage ? 'pagination-item normal' : 'pagination-item normal active';
       arr.push(
-        <div key={i} className={className} onClick={() => navigate(MAIN_ROUTE + 'search/' + i)}>
+        <div
+          key={i}
+          className={className}
+          onClick={() => changePage(`${i}`)}
+          data-testid={`pageItem_${i}`}
+        >
           {i}
         </div>
       );
     }
     return arr;
   };
-  console.log(info);
   return <>{print()}</>;
 };
 

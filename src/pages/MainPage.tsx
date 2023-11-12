@@ -1,37 +1,46 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import Header from '../components/Header';
 import Main from '../components/Main';
 import { fetchCharacters } from '../http/charactersApi';
-import { IResponse } from '../http/interfaces';
 import classes from '../css/layout.module.css';
 import { getUrl } from '../utils/utils';
 import { Outlet, useParams } from 'react-router-dom';
+import { Context, ContextType } from '../App.tsx';
 
 const MainPage = () => {
-  const [response, setResponse] = useState<IResponse>();
   const [loading, setLoading] = useState<boolean>(false);
   const { page } = useParams() as { page: string };
+  const { searchValue, setResponse, currentPage, setCurrentPage } =
+    useContext<ContextType>(Context);
+
+  useEffect(() => {
+    if (setCurrentPage) {
+      page && setCurrentPage(page);
+    }
+  }, []);
 
   const getData = async (url: string) => {
     setLoading(true);
     const response = await fetchCharacters(url);
-    // response && console.log(response);
-    setResponse(response);
-    setLoading(false);
+    if (response) {
+      if (setResponse) {
+        response && setResponse!(response);
+      }
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
-    const searchValue = localStorage.getItem('searchValue');
     const url = getUrl(searchValue);
-    page ? getData(`${url}?page=${page}`) : getData(url);
-  }, [page]);
+    currentPage ? getData(`${url}?page=${currentPage}`) : getData(url);
+  }, [currentPage]);
 
   return (
-    <div className={classes.wrapper}>
+    <div className={classes.wrapper} data-testid="mainpage-wrap">
       <Header getData={getData} />
       <div className="container-frontpage">
         <div className="left-front">
-          <Main getData={getData} loading={loading} response={response} page={page || '1'} />
+          <Main loading={loading} />
         </div>
         <Outlet />
       </div>

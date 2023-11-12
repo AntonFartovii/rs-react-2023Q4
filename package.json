@@ -12,7 +12,8 @@
     "format:check": "npm run prettier -- --check",
     "format:fix": "npm run prettier -- --write",
     "validate": "run-p lint:fix format:check",
-    "test": "jest"
+    "test": "jest",
+    "test:coverage": "npx jest --coverage --collectCoverageFrom=./src/**"
   },
   "dependencies": {
     "react": "^18.2.0",

@@ -1,55 +1,26 @@
 import classes from '../css/layout.module.css';
-import { ICharacter, IResponse } from '../http/interfaces';
+import { ICharacter } from '../http/interfaces';
 import Pagination from './Pagination';
-import { useNavigate } from 'react-router-dom';
-import { SEARCH_ROUTE } from '../router/pages';
+import { useContext } from 'react';
+import { Context, ContextType } from '../App.tsx';
+import Character from './Character.tsx';
 
 interface MainProps {
-  getData: (url: string) => Promise<void>;
-  response: IResponse | undefined;
   loading: boolean;
-  page: string;
 }
 
-const Main = ({ getData, response, loading, page }: MainProps) => {
-  const navigate = useNavigate();
-
-  const pageHandler = async (type: string) => {
-    const info = response?.info;
-    if (type === 'prev') {
-      if (info?.prev) {
-        await getData(info.prev);
-      }
-    } else if (type === 'next') {
-      if (info?.next) {
-        await getData(info.next);
-      }
-    }
-  };
-
-  const openCharacter = (id: number) => {
-    navigate(`/${SEARCH_ROUTE}/${page}/details/${id}`);
-  };
+const Main = ({ loading }: MainProps) => {
+  const { response } = useContext<ContextType>(Context);
 
   const print = () => {
     return (
       <>
         <div className="character-list">
           {response &&
-            response.results?.map((item: ICharacter) => (
-              <div className="character-item" key={item.id} onClick={() => openCharacter(item.id)}>
-                {item.name}
-                <div className="character-image">
-                  <img src={item.image} />
-                </div>
-                <div>Location: {item.location.name}</div>
-                <div>Species: {item.species}</div>
-                <div>Status: {item.status}</div>
-              </div>
-            ))}
+            response.results?.map((item: ICharacter) => <Character item={item} key={item.id} />)}
         </div>
         <div className="pagination">
-          <Pagination pageHandler={pageHandler} info={response?.info} page={page} />
+          <Pagination />
         </div>
       </>
     );
@@ -60,7 +31,7 @@ const Main = ({ getData, response, loading, page }: MainProps) => {
       <div className={classes['inner-wrapper']}>
         <div className="main-wrapper">
           {loading ? (
-            <span className="loader"></span>
+            <span className="loader" data-testid="loading"></span>
           ) : response?.results ? (
             print()
           ) : (

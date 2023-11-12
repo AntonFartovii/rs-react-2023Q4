@@ -1,25 +1,18 @@
-import { Navigate, Route, Routes } from 'react-router-dom';
-import { PAGE_404 } from './pages';
-import { IRoute, routesAll } from './routes';
+import { Route, Routes } from 'react-router-dom';
+import MainPage from '../pages/MainPage.tsx';
+import Page404 from '../pages/Page404.tsx';
+import { MAIN_ROUTE, PAGE_404, SEARCH_ROUTE } from './pages.ts';
+import CharacterPage from '../pages/CharacterPage.tsx';
 
 const AppRouter = () => {
-  const renderRoutes = (route: IRoute) => {
-    const Component = route.Component;
-    if (route.routes) {
-      return (
-        <Route key={route.path} path={route.path} element={<Component />}>
-          {route.routes.map(renderRoutes)}
-        </Route>
-      );
-    } else {
-      return <Route key={route.path} path={route.path} element={<Component />} />;
-    }
-  };
-
   return (
     <Routes>
-      {routesAll.map(renderRoutes)}
-      <Route path="*" element={<Navigate to={PAGE_404} />} />
+      <Route path={MAIN_ROUTE} element={<MainPage />} />
+      <Route path={SEARCH_ROUTE + '/:page'} element={<MainPage />}>
+        <Route path=":id" element={<CharacterPage />} />
+      </Route>
+      <Route path={PAGE_404} element={<Page404 />} />
+      <Route path="*" element={<Page404 />} />
     </Routes>
   );
 };
