@@ -1,5 +1,5 @@
 import './App.css';
-import { HashRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import AppRouter from './router/Router';
 import ErrorBoundary from './errorBoundary/ErrorBoundary';
 import { createContext, useState } from 'react';
@@ -18,13 +18,13 @@ export type ContextType = {
 
 export const Context = createContext<ContextType>({
   searchValue: '',
-  currentPage: '1',
+  currentPage: '',
   countItems: 20,
 });
 
 function App() {
   const [searchValue, setValue] = useState<string>(localStorage.getItem('searchValue') || '');
-  const [currentPage, setCurrentPage] = useState<string>('1');
+  const [currentPage, setCurrentPage] = useState<string>('');
   const [countItems, setCountItems] = useState<number>(20);
   const [response, setData] = useState<IResponse>({});
 
@@ -35,7 +35,7 @@ function App() {
 
   return (
     <ErrorBoundary>
-      <HashRouter>
+      <BrowserRouter>
         <Context.Provider
           value={{
             searchValue,
@@ -50,7 +50,7 @@ function App() {
         >
           <AppRouter />
         </Context.Provider>
-      </HashRouter>
+      </BrowserRouter>
     </ErrorBoundary>
   );
 }

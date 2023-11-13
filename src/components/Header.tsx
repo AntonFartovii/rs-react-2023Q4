@@ -9,9 +9,10 @@ interface IHeaderProps {
 }
 
 const Header = ({ getData }: IHeaderProps) => {
-  const { setSearchValue, searchValue } = useContext(Context);
+  const { setSearchValue, searchValue, setCurrentPage } = useContext(Context);
 
   const clickHandler = async () => {
+    setCurrentPage && setCurrentPage('1');
     searchValue && localStorage.setItem('searchValue', searchValue);
     const url = getUrl(searchValue);
     await getData(url);

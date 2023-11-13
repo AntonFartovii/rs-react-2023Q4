@@ -8,7 +8,9 @@ const Character = ({ item }: { item: ICharacter }) => {
   const navigate = useNavigate();
   const { currentPage } = useContext<ContextType>(Context);
   const openCharacter = (id: number) => {
-    navigate(`/${SEARCH_ROUTE}/${currentPage}/${id}`);
+    currentPage
+      ? navigate(`/${SEARCH_ROUTE}/${currentPage}/${id}`)
+      : navigate(`/${SEARCH_ROUTE}/1/${id}`);
   };
 
   return (

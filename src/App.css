@@ -189,9 +189,11 @@ body,
 .container-frontpage {
   display: flex;
   flex-direction: row;
+  width: 100%;
 }
 
 .left-front {
+  flex: 1;
 }
 
 .right-front {

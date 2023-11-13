@@ -21,7 +21,9 @@ const MainPage = () => {
 
   const getData = async (url: string) => {
     setLoading(true);
+    console.log(url);
     const response = await fetchCharacters(url);
+    console.log(response);
     if (response) {
       if (setResponse) {
         response && setResponse!(response);
@@ -32,7 +34,8 @@ const MainPage = () => {
 
   useEffect(() => {
     const url = getUrl(searchValue);
-    currentPage ? getData(`${url}?page=${currentPage}`) : getData(url);
+    const operand = searchValue ? '&' : '?';
+    currentPage ? getData(`${url}${operand}page=${currentPage}`) : getData(url);
   }, [currentPage]);
 
   return (

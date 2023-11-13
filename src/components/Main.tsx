@@ -16,8 +16,7 @@ const Main = ({ loading }: MainProps) => {
     return (
       <>
         <div className="character-list">
-          {response &&
-            response.results?.map((item: ICharacter) => <Character item={item} key={item.id} />)}
+          {response?.results?.map((item: ICharacter) => <Character item={item} key={item.id} />)}
         </div>
         <div className="pagination">
           <Pagination />

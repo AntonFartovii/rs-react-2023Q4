@@ -3,7 +3,7 @@ import Character from '../components/Character.tsx';
 import { ICharacter } from '../http/interfaces.ts';
 import { BrowserRouter } from 'react-router-dom';
 
-const character = {
+export const characterTest = {
   created: '2017-11-04T18:48:46.250Z',
   episode: ['https://rickandmortyapi.com/api/episode/1'],
   gender: 'Male',
@@ -23,7 +23,7 @@ describe('Application', () => {
     act(() => {
       render(
         <BrowserRouter>
-          <Character item={character} />
+          <Character item={characterTest} />
         </BrowserRouter>
       );
     });
