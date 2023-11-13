@@ -1,21 +1,18 @@
 import { FormEvent, useContext } from 'react';
 import classes from '../css/layout.module.css';
 import ButtonWithError from './ButtonWithError';
-import { getUrl } from '../utils/utils';
 import { Context } from '../App.tsx';
+import { useNavigate } from 'react-router-dom';
+import { MAIN_ROUTE, SEARCH_ROUTE } from '../router/pages.ts';
 
-interface IHeaderProps {
-  getData: (url: string) => Promise<void>;
-}
-
-const Header = ({ getData }: IHeaderProps) => {
+const Header = () => {
   const { setSearchValue, searchValue, setCurrentPage } = useContext(Context);
+  const navigate = useNavigate();
 
   const clickHandler = async () => {
     setCurrentPage && setCurrentPage('1');
     searchValue && localStorage.setItem('searchValue', searchValue);
-    const url = getUrl(searchValue);
-    await getData(url);
+    navigate(MAIN_ROUTE + SEARCH_ROUTE + '/1');
   };
 
   const searchHandler = (e: FormEvent<HTMLInputElement>) => {

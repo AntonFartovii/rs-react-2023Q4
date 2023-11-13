@@ -40,7 +40,7 @@ const MainPage = () => {
 
   return (
     <div className={classes.wrapper} data-testid="mainpage-wrap">
-      <Header getData={getData} />
+      <Header />
       <div className="container-frontpage">
         <div className="left-front">
           <Main loading={loading} />

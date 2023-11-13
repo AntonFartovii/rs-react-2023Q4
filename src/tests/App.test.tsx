@@ -5,6 +5,7 @@ import Header from '../components/Header.tsx';
 import ButtonWithError from '../components/ButtonWithError.tsx';
 import Main from '../components/Main.tsx';
 import { MyError, rejectCustomError } from '../errorBoundary/MyError.ts';
+import { BrowserRouter } from 'react-router-dom';
 
 describe('Application', () => {
   it('render main', async () => {
@@ -26,9 +27,11 @@ describe('Application', () => {
   });
 
   it('clickHandler updates localStorage and calls getData', async () => {
-    const getDataMock = jest.fn();
-
-    render(<Header getData={getDataMock} />);
+    render(
+      <BrowserRouter>
+        <Header />
+      </BrowserRouter>
+    );
 
     const input: HTMLInputElement = await screen.findByTestId('searchInput');
     const sendInput: HTMLInputElement = await screen.findByTestId('sendButton');
@@ -42,7 +45,6 @@ describe('Application', () => {
 
   it('should show context search value in input', async () => {
     const setSearchValue = jest.fn();
-    const getData = jest.fn();
     const value = {
       searchValue: 'Rick',
       setSearchValue,
@@ -52,7 +54,9 @@ describe('Application', () => {
     act(() => {
       render(
         <Context.Provider value={value}>
-          <Header getData={getData} />
+          <BrowserRouter>
+            <Header />
+          </BrowserRouter>
         </Context.Provider>
       );
     });
