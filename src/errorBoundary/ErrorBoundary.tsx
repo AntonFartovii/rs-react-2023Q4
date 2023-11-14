@@ -8,6 +8,7 @@ interface ErrorBoundaryState {
 
 interface ErrorBoundaryProps {
   children: React.JSX.Element;
+  fallback: React.JSX.Element;
 }
 
 class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
@@ -31,12 +32,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 
   render() {
     if (this.state.hasError) {
-      return (
-        <div className="error-container">
-          <p>Seems like an error occurred!</p>
-          <a href="http://localhost:5173">На главную!</a>
-        </div>
-      );
+      return this.props.fallback;
     }
     return this.props.children;
   }

@@ -4,6 +4,7 @@ import AppRouter from './router/Router';
 import ErrorBoundary from './errorBoundary/ErrorBoundary';
 import { createContext, useState } from 'react';
 import { IResponse } from './http/interfaces.ts';
+import ErrorFallback from './components/ErrorFallback.tsx';
 
 export type ContextType = {
   searchValue: string;
@@ -34,7 +35,7 @@ function App() {
   };
 
   return (
-    <ErrorBoundary>
+    <ErrorBoundary fallback={<ErrorFallback />}>
       <BrowserRouter>
         <Context.Provider
           value={{
